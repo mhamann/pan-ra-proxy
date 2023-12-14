@@ -25,6 +25,19 @@ namespace Lithnet.Pan.RAProxy
             }
         }
 
+        [ConfigurationProperty("trace-enabled", IsRequired = false, DefaultValue = false)]
+        public bool TracingEnabled
+        {
+            get
+            {
+                return (bool)this["trace-enabled"];
+            }
+            set
+            {
+                this["trace-enabled"] = value;
+            }
+        }
+
         [ConfigurationProperty("username-filter", IsRequired = false, DefaultValue = null)]
         public string UsernameFilter
         {

@@ -144,7 +144,7 @@ namespace Lithnet.Pan.RAProxy
                     if (Config.IsUsernameFilterMatch(username))
                     {
                         Logging.CounterIgnoredPerSecond.Increment();
-                        Logging.WriteDebugEntry($"A radius accounting packet was discarded the username matched the regex filter", EventLogEntryType.Warning, Logging.EventIDFilteredUsernameDropped);
+                        Logging.WriteDebugEntry($"A radius accounting packet was discarded the username '{username}' matched the regex filter", EventLogEntryType.Warning, Logging.EventIDFilteredUsernameDropped);
                         continue;
                     }
 
@@ -173,7 +173,7 @@ namespace Lithnet.Pan.RAProxy
                     if (items.Count == 0)
                     {
                         Logging.CounterIgnoredPerSecond.Increment();
-                        Logging.WriteDebugEntry($"A radius accounting packet was discarded because it did not contain any IP address entries", EventLogEntryType.Warning, Logging.EventIDInvalidRadiusPacket);
+                        Logging.WriteDebugEntry($"A radius accounting packet for username '{username}' was discarded because it did not contain any IP address entries", EventLogEntryType.Warning, Logging.EventIDInvalidRadiusPacket);
                         continue;
                     }
 
@@ -256,7 +256,7 @@ namespace Lithnet.Pan.RAProxy
                 Logging.CounterSentLoginsPerSecond.IncrementBy(message.Payload.Login.Entries.Count);
                 Logging.CounterSentLogoutsPerSecond.IncrementBy(message.Payload.Logout.Entries.Count);
                 Trace.WriteLine($"Batch completed");
-                Logging.WriteEntry($"UserID API mapping succeeded\nLogins: {message.Payload.Login.Entries.Count}\nLogouts: {message.Payload.Logout.Entries.Count}\n", EventLogEntryType.Information, Logging.EventIDUserIDUpdateComplete);
+                Logging.WriteEntry($"UserID API mapping succeeded\nLogins: {message.Payload.Login.Entries.Count} (Users: {string.Join(", ", message.Payload.Login.Entries.Select(entry => entry.Username))})\nLogouts: {message.Payload.Logout.Entries.Count} (Users: {string.Join(", ", message.Payload.Logout.Entries.Select(entry => entry.Username))})\n", EventLogEntryType.Information, Logging.EventIDUserIDUpdateComplete);
             }
             catch (AggregateUserMappingException ex)
             {
@@ -303,20 +303,20 @@ namespace Lithnet.Pan.RAProxy
                 if (ex.NativeErrorCode == 1317)
                 {
                     // Account does not exist;
-                    Logging.WriteEntry($"Could not translate name {username} as it was not found in the directory", EventLogEntryType.Warning, Logging.EventIDCouldNotMapNameNotFound);
+                    Logging.WriteEntry($"Could not translate username '{username}' as it was not found in the directory", EventLogEntryType.Warning, Logging.EventIDCouldNotMapNameNotFound);
                 }
 
                 if (ex.NativeErrorCode == 1355)
                 {
                     // Domain does not exist;
-                    Logging.WriteEntry($"Could not translate name {username} as the domain was unknown", EventLogEntryType.Warning, Logging.EventIDCouldNotMapDomainNotFound);
+                    Logging.WriteEntry($"Could not translate username '{username}' as the domain was unknown", EventLogEntryType.Warning, Logging.EventIDCouldNotMapDomainNotFound);
                 }
 
-                Logging.WriteEntry($"Could not translate name {username} due to an unknown error\n{ex}", EventLogEntryType.Warning, Logging.EventIDCouldNotMapUnknown);
+                Logging.WriteEntry($"Could not translate username '{username}' due to an unknown error\n{ex}", EventLogEntryType.Warning, Logging.EventIDCouldNotMapUnknown);
             }
             catch (Exception ex)
             {
-                Logging.WriteEntry($"Could not translate name {username} due to an unknown error\n{ex}", EventLogEntryType.Warning, Logging.EventIDCouldNotMapUnknown);
+                Logging.WriteEntry($"Could not translate username '{username}' due to an unknown error\n{ex}", EventLogEntryType.Warning, Logging.EventIDCouldNotMapUnknown);
             }
 
             return username;

@@ -44,6 +44,12 @@ namespace Lithnet.Pan.RAProxy
                 EventLog.CreateEventSource(new EventSourceCreationData(Program.EventSourceName, "Application"));
             }
 
+            // Log trace messages if enabled
+            if (Config.TracingEnabled) {
+                EventLogTraceListener traceListener = new EventLogTraceListener(EventSourceName);
+                Trace.Listeners.Add(traceListener);
+            }
+
             if (Config.DisableCertificateValidation)
             {
                 ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, errors) => true;
