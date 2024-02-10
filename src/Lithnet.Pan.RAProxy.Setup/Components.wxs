@@ -6,7 +6,7 @@
       </Component>
 
       <Component Id="cmp735b70a6e0614eb5b495a21ef8641146" Bitness="always64">
-        <File Id="fil6ae07342fce0489b90e51d06cdc17684" KeyPath="yes" Source="$(var.Lithnet.Pan.RAProxy.TargetDir)\Lithnet.Pan.RAProxy.exe" />
+        <File Id="fil6ae07342fce0489b90e51d06cdc17684" KeyPath="yes" Source="$(var.Lithnet.Pan.RAProxy.TargetDir)..\publish\Lithnet.Pan.RAProxy.exe" />
         <ServiceInstall Id="panraproxy" DisplayName="Lithnet PAN RA Proxy" Account="NT AUTHORITY\NETWORKSERVICE" Name="[SERVICE_NAME]" ErrorControl="normal" Start="auto" Type="ownProcess" Description="Forwards RADIUS accounting requests to a Palo Alto firewall as User-ID updates" Vital="yes" Interactive="no">
         </ServiceInstall>
         <ServiceControl Id="ServiceControlEvents" Name="[SERVICE_NAME]" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
@@ -28,7 +28,7 @@
 
       
       <Component Id="cmpb69520521cbba41ac82adecb1ef714866" NeverOverwrite="yes" Bitness="always64">
-        <File Id="App.config" KeyPath="yes" Source="$(var.Lithnet.Pan.RAProxy.TargetDir)Lithnet.Pan.RAProxy.dll.config" />
+        <File Id="App.config" KeyPath="yes" Source="$(var.Lithnet.Pan.RAProxy.TargetDir)..\publish\Lithnet.Pan.RAProxy.dll.config" />
       </Component>
 
     </DirectoryRef>
